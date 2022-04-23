@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author Irene Jiaxin Fan
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -94,7 +94,7 @@ public class Model extends Observable {
         setChanged();
     }
 
-    /** Tilt the board toward SIDE. Return true iff this changes the board.
+    /** Tilt the board toward SIDE. Return true if this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
      *    the same value, they are merged into one Tile of twice the original
@@ -110,15 +110,52 @@ public class Model extends Observable {
         boolean changed;
         changed = false;
 
-        // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
-
+        board.setViewingPerspective(side);
+        for (int col = 0; col < board.size(); col++) {
+            boolean colChanged = tiltColumn(col);
+            if (colChanged) {
+                changed = true;
+            }
+        }
+        board.setViewingPerspective(Side.NORTH);
         checkGameOver();
         if (changed) {
             setChanged();
         }
         return changed;
+    }
+
+    /** Tilt one column toward side SIDE. Return true if this changes the board.
+     * @author Irene Jiaxin Fan
+     */
+    public boolean tiltColumn(int col) {
+        boolean result = false;
+        for (int row = size() - 1; row > 0; row -= 1) {
+            Tile above = tile(col, row);
+            int rowBelow = row - 1;
+            Tile below = tile(col, rowBelow);
+            while (rowBelow - 1 >= 0 && below == null) {
+                rowBelow -= 1;
+                below = tile(col, rowBelow);
+            }
+            if (below == null) {
+                continue;
+            } else if (above == null) {
+                board.move(col, row, below);
+                result = true;
+                row += 1;
+            } else if (above.value() == below.value()) {
+                board.move(col, row, below);
+                result = true;
+                score += tile(col, row).value();
+            } else if (rowBelow != row - 1){
+                board.move(col, row - 1, below);
+                result = true;
+            }
+        }
+        return result;
     }
 
     /** Checks if the game is over and sets the gameOver variable
@@ -137,7 +174,13 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        // TODO: Fill in this function.
+        for (int col = 0; col < b.size(); col++){
+            for (int row = 0; row < b.size(); row++){
+                if (b.tile(col, row) == null){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -147,7 +190,15 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        for (int col = 0; col < b.size(); col++){
+            for (int row = 0; row < b.size(); row++){
+                if (b.tile(col, row) == null){
+                    continue;
+                } else if (b.tile(col, row).value() == MAX_PIECE){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -158,8 +209,48 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        // TODO: Fill in this function.
+        if (emptySpaceExists(b)){
+            return true;
+        } else if (AdjacentTilesWithSameValueExit(b)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /** Returns true if there are two adjacent tiles with the same value
+     * @author: Irene Jiaxin Fan
+     */
+    public static boolean AdjacentTilesWithSameValueExit(Board b) {
+        for (int col = 0; col < b.size(); col++){
+            for (int row = 0; row < b.size(); row++){
+                Tile t = b.tile(col, row);
+                if (t == null){
+                    continue;
+                }
+                for (int i = -1; i <= 1; i += 2) {
+                    if (0 <= col + i && col + i < b.size() && TwoTilesHaveSameValue(b.tile(col + i, row), t)){
+                            return true;
+                    } else if (0 <= row + i && row + i < b.size() && TwoTilesHaveSameValue(b.tile(col, row + i), t)){
+                            return true;
+                    }
+                }
+            }
+        }
         return false;
+    }
+
+    /** Returns true if two tiles have the same value
+     * @author: Irene Jiaxin Fan
+     */
+    public static boolean TwoTilesHaveSameValue(Tile t1, Tile t2){
+        if (t1 == null || t2 == null){
+            return false;
+        } else if (t1.value() == t2.value()){
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

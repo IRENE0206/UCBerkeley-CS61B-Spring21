@@ -83,7 +83,7 @@ public class Board implements Iterable<Tile> {
     /** Places the Tile TILE at column COL, row ROW where COL and ROW are
      * treated as coordinates with respect to the current viewPerspective.
      *
-     * Returns whether or not this move is a merge.
+     * Returns whether this move is a merge.
      * */
     public boolean move(int col, int row, Tile tile) {
         int pcol = viewPerspective.col(col, row, size()),
@@ -121,7 +121,7 @@ public class Board implements Iterable<Tile> {
         return out.toString();
     }
 
-    /** Iterates through teach tile in the board. */
+    /** Iterates through each tile in the board. */
     private class AllTileIterator implements Iterator<Tile>, Iterable<Tile> {
         int r, c;
 
