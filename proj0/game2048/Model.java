@@ -130,7 +130,7 @@ public class Model extends Observable {
     /** Tilt one column toward side SIDE. Return true if this changes the board.
      * @author Irene Jiaxin Fan
      */
-    public boolean tiltColumn(int col) {
+    private boolean tiltColumn(int col) {
         boolean result = false;
         for (int row = size() - 1; row > 0; row -= 1) {
             Tile above = tile(col, row);
@@ -150,7 +150,7 @@ public class Model extends Observable {
                 board.move(col, row, below);
                 result = true;
                 score += tile(col, row).value();
-            } else if (rowBelow != row - 1){
+            } else if (rowBelow != row - 1) {
                 board.move(col, row - 1, below);
                 result = true;
             }
@@ -174,9 +174,9 @@ public class Model extends Observable {
      *  Empty spaces are stored as null.
      * */
     public static boolean emptySpaceExists(Board b) {
-        for (int col = 0; col < b.size(); col++){
-            for (int row = 0; row < b.size(); row++){
-                if (b.tile(col, row) == null){
+        for (int col = 0; col < b.size(); col++) {
+            for (int row = 0; row < b.size(); row++) {
+                if (b.tile(col, row) == null) {
                     return true;
                 }
             }
@@ -190,11 +190,11 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        for (int col = 0; col < b.size(); col++){
-            for (int row = 0; row < b.size(); row++){
-                if (b.tile(col, row) == null){
+        for (int col = 0; col < b.size(); col++) {
+            for (int row = 0; row < b.size(); row++) {
+                if (b.tile(col, row) == null) {
                     continue;
-                } else if (b.tile(col, row).value() == MAX_PIECE){
+                } else if (b.tile(col, row).value() == MAX_PIECE) {
                     return true;
                 }
             }
@@ -209,29 +209,21 @@ public class Model extends Observable {
      * 2. There are two adjacent tiles with the same value.
      */
     public static boolean atLeastOneMoveExists(Board b) {
-        if (emptySpaceExists(b)){
-            return true;
-        } else if (AdjacentTilesWithSameValueExit(b)) {
-            return true;
-        } else {
-            return false;
-        }
+        return emptySpaceExists(b) || AdjacentTilesWithSameValueExit(b);
     }
 
-    /** Returns true if there are two adjacent tiles with the same value
-     * @author: Irene Jiaxin Fan
-     */
-    public static boolean AdjacentTilesWithSameValueExit(Board b) {
-        for (int col = 0; col < b.size(); col++){
-            for (int row = 0; row < b.size(); row++){
+    // Returns true if there are two adjacent tiles with the same value
+    private static boolean AdjacentTilesWithSameValueExit(Board b) {
+        for (int col = 0; col < b.size(); col++) {
+            for (int row = 0; row < b.size(); row++) {
                 Tile t = b.tile(col, row);
                 if (t == null){
                     continue;
                 }
                 for (int i = -1; i <= 1; i += 2) {
-                    if (0 <= col + i && col + i < b.size() && TwoTilesHaveSameValue(b.tile(col + i, row), t)){
+                    if (0 <= col + i && col + i < b.size() && TwoTilesHaveSameValue(b.tile(col + i, row), t)) {
                             return true;
-                    } else if (0 <= row + i && row + i < b.size() && TwoTilesHaveSameValue(b.tile(col, row + i), t)){
+                    } else if (0 <= row + i && row + i < b.size() && TwoTilesHaveSameValue(b.tile(col, row + i), t)) {
                             return true;
                     }
                 }
@@ -240,17 +232,11 @@ public class Model extends Observable {
         return false;
     }
 
-    /** Returns true if two tiles have the same value
-     * @author: Irene Jiaxin Fan
-     */
-    public static boolean TwoTilesHaveSameValue(Tile t1, Tile t2){
-        if (t1 == null || t2 == null){
+    // Returns true if two tiles have the same value
+    private static boolean TwoTilesHaveSameValue(Tile t1, Tile t2) {
+        if (t1 == null || t2 == null) {
             return false;
-        } else if (t1.value() == t2.value()){
-            return true;
-        } else {
-            return false;
-        }
+        } else return t1.value() == t2.value();
     }
 
 
