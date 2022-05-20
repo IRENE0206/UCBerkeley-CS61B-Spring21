@@ -48,7 +48,7 @@ public class LinkedListDeque<T> {
 
     // Returns true if deque is empty, false otherwise.
     public boolean isEmpty() {
-        return sentinel.next == null;
+        return sentinel.next == sentinel;
     }
 
     // Returns the number of items in the deque.
@@ -61,7 +61,7 @@ public class LinkedListDeque<T> {
      * If no such item exists, returns null.
      */
     public T removeFirst() {
-        if (sentinel.next == null) {
+        if (isEmpty()) {
             return null;
         }
         T first = sentinel.next.item;
@@ -75,7 +75,7 @@ public class LinkedListDeque<T> {
      * If no such item exists, returns null.
      */
     public T removeLast() {
-        if (sentinel.prev == null) {
+        if (isEmpty()) {
             return null;
         }
         T last = sentinel.prev.item;
@@ -108,12 +108,50 @@ public class LinkedListDeque<T> {
 
     // Helper-method of getRecursive.
     private T getRecursiveHelper(LinkedNode s, int index) {
-        if (s.next != sentinel && index == 0) {
+        if (!isEmpty() && index == 0) {
             return s.next.item;
-        } else if (index < 0 || s.next == sentinel) {
+        } else if (index < 0 || isEmpty()) {
             return null;
         } else {
             return getRecursiveHelper(s.next, index - 1);
         }
     }
+
+    /**
+     * Prints the items in the deque from first to last, separated by a space.
+     * Once all the items have been printed, print out a new line.
+     */
+    public void printDeque() {
+        LinkedNode p = sentinel;
+        while (p.next != sentinel) {
+            System.out.print(p.next.item + " ");
+            p = p.next;
+        }
+        System.out.println();
+    }
+
+    /**
+     * Returns whether the parameter o is equal to the Deque.
+     * o is considered equal if it is a Deque and if it contains the same contents
+     * (as governed by the generic T’s equals method) in the same order.
+     */
+    public boolean equals(Object o) {
+        if (!(o instanceof LinkedListDeque) || o.size() != this.size()) {
+            return false;
+        }
+        LinkedNode p1 = this.sentinel;
+        LinkedNode p2 = o.sentinel;
+        if (o.isEmpty() && this.isEmpty()) {
+            return true;
+        }
+        while (p1.next != sentinel) {
+            if (!(p1.next.item.equals(o.next.item))) {
+                return false;
+            }
+            p1 = p1.next;
+            p2 = p2.next;
+        }
+        return true;
+    }
+
 }
