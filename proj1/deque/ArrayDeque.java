@@ -28,7 +28,11 @@ public class ArrayDeque<T> {
         size += 1;
         resize();
         items[nextFirst] = item;
-        nextFirst -= 1;
+        if (nextFirst == 0) {
+            nextFirst = items.length - 1;
+        } else {
+            nextFirst -= 1;
+        }
     }
 
     /**
@@ -39,7 +43,11 @@ public class ArrayDeque<T> {
         size += 1;
         resize();
         items[nextLast] = item;
-        nextLast += 1;
+        if (nextLast == items.length) {
+            nextLast = 0;
+        } else {
+            nextLast += 1;
+        }
     }
 
     /**
