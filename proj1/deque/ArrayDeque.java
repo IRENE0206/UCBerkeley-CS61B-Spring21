@@ -25,8 +25,8 @@ public class ArrayDeque<T> {
      * Assume that item is never null.
      */
     public void addFirst(T item) {
-        size += 1;
         resize();
+        size += 1;
         items[nextFirst] = item;
         if (nextFirst == 0) {
             nextFirst = items.length - 1;
@@ -40,10 +40,10 @@ public class ArrayDeque<T> {
      * Assume that item is never null.
      */
     public void addLast(T item) {
-        size += 1;
         resize();
+        size += 1;
         items[nextLast] = item;
-        if (nextLast == items.length) {
+        if (nextLast == items.length - 1) {
             nextLast = 0;
         } else {
             nextLast += 1;
@@ -67,12 +67,13 @@ public class ArrayDeque<T> {
      * Once all the items have been printed, print out a new line.
      */
     public void printDeque() {
-        int index = getFirst();
-        while (index != nextLast) {
-            System.out.print(items[index] + " ");
-            index += 1;
-            if (index == items.length) {
-                index = 0;
+        int firstIndex = getFirst();
+        int actualIndex = firstIndex;
+        for (int index = 0; index < size; index++) {
+            System.out.print(items[actualIndex] + " ");
+            actualIndex += 1;
+            if (actualIndex == items.length) {
+                actualIndex = 0;
             }
         }
         System.out.println();
@@ -139,19 +140,28 @@ public class ArrayDeque<T> {
         int newLength;
         T[] newArray;
         if (size >= 16 && size * 4 < items.length) {
-            newLength = items.length / 2;
-        } else if (size == items.length - 2) {
+            if (isEmpty()) {
+                newLength = 8;
+            } else {
+                newLength = items.length / 2;
+            }
+        } else if (size == items.length) {
             newLength = 2 * size;
         } else {
             return;
         }
         newArray = (T[]) new Object[newLength];
-        if (nextFirst < nextLast) {
-            System.arraycopy(items, getFirst(), newArray, 0, size);
-        } else {
-            System.arraycopy(items, getFirst(), newArray, 0, items.length -getFirst());
-            System.arraycopy(items, 0, newArray, size - 1, getLast() + 1);
+        if (!isEmpty()) {
+            int prevFirstIndex = getFirst();
+            int prevLastIndex = getLast();
+            if (prevFirstIndex < prevLastIndex) {
+                System.arraycopy(items, prevFirstIndex, newArray, 0, size);
+            } else {
+                System.arraycopy(items, prevFirstIndex, newArray, 0, items.length - prevFirstIndex);
+                System.arraycopy(items, 0, newArray, size - 1,  prevLastIndex + 1);
+            }
         }
+        items = newArray;
         nextFirst = newLength - 1;
         nextLast = size;
     }

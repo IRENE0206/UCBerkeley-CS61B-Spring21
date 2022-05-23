@@ -72,7 +72,7 @@ public class LinkedListDequeTest {
     }
 
     @Test
-    /* Check if you can create LinkedListDeques with different parameterized types*/
+    /* Check if you can create LinkedListDeque with different parameterized types*/
     public void multipleParamTest() {
 
         LinkedListDeque<String>  lld1 = new LinkedListDeque<String>();
