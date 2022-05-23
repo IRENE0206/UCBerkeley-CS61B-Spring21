@@ -16,7 +16,7 @@ public class ArrayDeque<T> {
     public ArrayDeque() {
         items = (T[]) new Object[8];
         size = 0;
-        nextFirst = items.length;
+        nextFirst = items.length - 1;
         nextLast = 0;
     }
 
