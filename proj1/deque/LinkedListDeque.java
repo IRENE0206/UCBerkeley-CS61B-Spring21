@@ -29,8 +29,8 @@ public class LinkedListDeque<T> {
     }
     // Creates an empty linked list deque.
     public LinkedListDeque() {
-        sentinel = new LinkedNode();
-        size = 0;
+       this.sentinel = new LinkedNode();
+        this.size = 0;
     }
 
     /**
@@ -154,13 +154,21 @@ public class LinkedListDeque<T> {
      * o is considered equal if it is a Deque and if it contains the same contents
      * (as governed by the generic T’s equals method) in the same order.
      */
+    @Override
     public boolean equals(Object o) {
-        if (!(o instanceof LinkedListDeque) || ((LinkedListDeque) o).size() != this.size()) {
+        if (o == null || !(o instanceof LinkedListDeque)) {
+            return false;
+        }
+        if (o == this) {
+            return true;
+        }
+        LinkedListDeque<T> oPro = (LinkedListDeque<T>) o;
+        if (oPro.size() != this.size()) {
             return false;
         }
         LinkedNode p1 = this.sentinel;
-        LinkedNode p2 = ((LinkedListDeque) o).sentinel;
-        if (((LinkedListDeque) o).isEmpty() && this.isEmpty()) {
+        LinkedNode p2 = oPro.sentinel;
+        if (oPro.isEmpty() && this.isEmpty()) {
             return true;
         }
         while (p1.next != sentinel) {

@@ -14,10 +14,10 @@ public class ArrayDeque<T> {
     private int nextLast;
 
     public ArrayDeque() {
-        items = (T[]) new Object[8];
-        size = 0;
-        nextFirst = items.length - 1;
-        nextLast = 0;
+        this.items = (T[]) new Object[8];
+        this.size = 0;
+        this.nextFirst = items.length - 1;
+        this.nextLast = 0;
     }
 
     /**
@@ -28,11 +28,7 @@ public class ArrayDeque<T> {
         resize();
         size += 1;
         items[nextFirst] = item;
-        if (nextFirst == 0) {
-            nextFirst = items.length - 1;
-        } else {
-            nextFirst -= 1;
-        }
+        nextFirst = (nextFirst - 1) % items.length;
     }
 
     /**
@@ -43,11 +39,7 @@ public class ArrayDeque<T> {
         resize();
         size += 1;
         items[nextLast] = item;
-        if (nextLast == items.length - 1) {
-            nextLast = 0;
-        } else {
-            nextLast += 1;
-        }
+        nextLast = (nextLast + 1) % items.length;
     }
 
     /**
@@ -71,10 +63,7 @@ public class ArrayDeque<T> {
         int actualIndex = firstIndex;
         for (int index = 0; index < size; index++) {
             System.out.print(items[actualIndex] + " ");
-            actualIndex += 1;
-            if (actualIndex == items.length) {
-                actualIndex = 0;
-            }
+            actualIndex = (actualIndex + 1) % items.length;
         }
         System.out.println();
     }
@@ -84,10 +73,7 @@ public class ArrayDeque<T> {
      * Assume the deque is not empty.
      */
     private int getFirst() {
-        if (nextFirst == items.length - 1) {
-            return 0;
-        }
-        return nextFirst + 1;
+        return (nextFirst + 1) % items.length;
     }
 
     /**
@@ -127,10 +113,7 @@ public class ArrayDeque<T> {
      * Assume the deque is not empty.
      */
     private int getLast() {
-        if (nextLast == 0) {
-            return items.length - 1;
-        }
-        return nextLast - 1;
+        return (nextLast - 1) % items.length;
     }
 
     /**
@@ -176,11 +159,7 @@ public class ArrayDeque<T> {
             return null;
         }
         int i = getFirst() + index;
-        if (i < items.length) {
-            return items[i];
-        } else {
-            return items[i - items.length];
-        }
+        return items[i % items.length];
     }
 
     /**
@@ -189,23 +168,22 @@ public class ArrayDeque<T> {
      * (as governed by the generic T’s equals method) in the same order.
      */
     public boolean equals(Object o) {
-        if (!(o instanceof ArrayDeque) || ((ArrayDeque) o).size() != this.size) {
+        if (o == null || !(o instanceof ArrayDeque)) {
             return false;
         }
-        int index = this.getFirst();
-        int indexO = ((ArrayDeque) o).getFirst();
-        for (int i = 0; i < this.size; i++) {
-            if (index + i >= this.items.length) {
-                index = index + i - this.items.length;
-            } else {
-                index += i;
-            }
-            if (indexO + i >= ((ArrayDeque) o).items.length) {
-                indexO = indexO + i - ((ArrayDeque) o).items.length;
-            } else {
-                indexO += i;
-            }
-            if (!this.items[index].equals(((ArrayDeque) o).items[indexO])) {
+        if (o == this) {
+            return true;
+        }
+        ArrayDeque<T> oPro = (ArrayDeque<T>) o;
+        if (oPro.size() != this.size()) {
+            return false;
+        }
+        int index = getFirst();
+        int indexO = oPro.getFirst();
+        for (int i = 0; i < size; i++) {
+            index = (index + i) % items.length;
+            indexO = (indexO + i) % oPro.items.length;
+            if (!items[index].equals(oPro.items[indexO])) {
                 return false;
             }
         }
