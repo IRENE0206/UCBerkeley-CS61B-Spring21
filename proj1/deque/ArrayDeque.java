@@ -1,7 +1,5 @@
 package deque;
 
-import java.lang.reflect.Array;
-
 /**
  * Build the ArrayDeque class using arrays as the core data structure.
  * @author Irene Jiaxin Fan
@@ -28,7 +26,11 @@ public class ArrayDeque<T> {
         resize();
         size += 1;
         items[nextFirst] = item;
-        nextFirst = (nextFirst - 1) % items.length;
+        if (nextFirst == 0) {
+            nextFirst = items.length - 1;
+        } else {
+            nextFirst = (nextFirst - 1) % items.length;
+        }
     }
 
     /**
@@ -113,6 +115,9 @@ public class ArrayDeque<T> {
      * Assume the deque is not empty.
      */
     private int getLast() {
+        if (nextLast == 0) {
+            return items.length - 1;
+        }
         return (nextLast - 1) % items.length;
     }
 
