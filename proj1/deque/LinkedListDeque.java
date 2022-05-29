@@ -4,7 +4,7 @@ package deque;
  * Build the LinkedListDeque class, which is LinkedList based.
  * @author Irene Jiaxin Fan
  */
-public class LinkedListDeque<T> {
+public class LinkedListDeque<T> implements Deque<T> {
     private LinkedNode sentinel;
     private int size;
     /**
@@ -37,6 +37,7 @@ public class LinkedListDeque<T> {
      * Adds an item of type T to the front of the deque.
      * You can assume that item is never null.
      */
+    @Override
     public void addFirst(T item) {
         LinkedNode firstNode = new LinkedNode(item, sentinel, sentinel.next);
         size += 1;
@@ -52,6 +53,7 @@ public class LinkedListDeque<T> {
      * Adds an item of type T to the back of the deque.
      * You can assume that item is never null.
      */
+    @Override
     public void addLast(T item) {
         LinkedNode lastNode = new LinkedNode(item, sentinel.prev, sentinel);
         size += 1;
@@ -63,12 +65,8 @@ public class LinkedListDeque<T> {
         sentinel.prev = lastNode;
     }
 
-    // Returns true if deque is empty, false otherwise.
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
     // Returns the number of items in the deque.
+    @Override
     public int size() {
         return size;
     }
@@ -77,6 +75,7 @@ public class LinkedListDeque<T> {
      * Removes and returns the item at the front of the deque.
      * If no such item exists, returns null.
      */
+    @Override
     public T removeFirst() {
         if (isEmpty()) {
             return null;
@@ -92,6 +91,7 @@ public class LinkedListDeque<T> {
      * Removes and returns the item at the back of the deque.
      * If no such item exists, returns null.
      */
+    @Override
     public T removeLast() {
         if (isEmpty()) {
             return null;
@@ -108,6 +108,7 @@ public class LinkedListDeque<T> {
      * If no such item exists, returns null.
      * Must not alter the deque!
      */
+    @Override
     public T get(int index) {
         LinkedNode p = sentinel;
         while (p.next != sentinel) {
@@ -140,6 +141,7 @@ public class LinkedListDeque<T> {
      * Prints the items in the deque from first to last, separated by a space.
      * Once all the items have been printed, print out a new line.
      */
+    @Override
     public void printDeque() {
         LinkedNode p = sentinel;
         while (p.next != sentinel) {
@@ -156,27 +158,25 @@ public class LinkedListDeque<T> {
      */
     @Override
     public boolean equals(Object o) {
-        if (o == null || !(o instanceof LinkedListDeque)) {
+        if (o == null || !(o instanceof Deque)) {
             return false;
         }
         if (o == this) {
             return true;
         }
-        LinkedListDeque<T> oPro = (LinkedListDeque<T>) o;
+        Deque<T> oPro = (Deque<T>) o;
         if (oPro.size() != this.size()) {
             return false;
         }
-        LinkedNode p1 = this.sentinel;
-        LinkedNode p2 = oPro.sentinel;
+        LinkedNode p = this.sentinel;
         if (oPro.isEmpty() && this.isEmpty()) {
             return true;
         }
-        while (p1.next != sentinel) {
-            if (!(p1.next.item.equals(p2.next.item))) {
+        for (int i = 0; i < size; i++) {
+            if (!p.next.item.equals(oPro.get(i))) {
                 return false;
             }
-            p1 = p1.next;
-            p2 = p2.next;
+            p = p.next;
         }
         return true;
     }

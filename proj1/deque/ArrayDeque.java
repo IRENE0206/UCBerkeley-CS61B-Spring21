@@ -5,7 +5,7 @@ package deque;
  * @author Irene Jiaxin Fan
 */
 
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T>{
     private int size;
     private T[] items;
     private int nextFirst;
@@ -22,6 +22,7 @@ public class ArrayDeque<T> {
      * Adds an item of type T to the front of the deque.
      * Assume that item is never null.
      */
+    @Override
     public void addFirst(T item) {
         resize();
         size += 1;
@@ -37,6 +38,7 @@ public class ArrayDeque<T> {
      * Adds an item of type T to the back of the deque.
      * Assume that item is never null.
      */
+    @Override
     public void addLast(T item) {
         resize();
         size += 1;
@@ -44,14 +46,8 @@ public class ArrayDeque<T> {
         nextLast = (nextLast + 1) % items.length;
     }
 
-    /**
-     * Returns true if deque is empty, false otherwise.
-     */
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
     // Returns the number of items in the deque.
+    @Override
     public int size() {
         return size;
     }
@@ -60,6 +56,7 @@ public class ArrayDeque<T> {
      * Prints the items in the deque from first to last, separated by a space.
      * Once all the items have been printed, print out a new line.
      */
+    @Override
     public void printDeque() {
         int firstIndex = getFirst();
         int actualIndex = firstIndex;
@@ -82,6 +79,7 @@ public class ArrayDeque<T> {
      * Removes and returns the item at the front of the deque.
      * If no such item exists, returns null.
      */
+    @Override
     public T removeFirst() {
         if (isEmpty()) {
             return null;
@@ -98,6 +96,7 @@ public class ArrayDeque<T> {
      * Removes and returns the item at the back of the deque.
      * If no such item exists, returns null.
      */
+    @Override
     public T removeLast() {
         if (isEmpty()) {
             return null;
@@ -159,6 +158,7 @@ public class ArrayDeque<T> {
      * If no such item exists, returns null.
      * Must not alter the deque!
      */
+    @Override
     public T get(int index) {
         if (index >= size) {
             return null;
@@ -172,23 +172,22 @@ public class ArrayDeque<T> {
      * o is considered equal if it is a Deque and if it contains the same contents
      * (as governed by the generic T’s equals method) in the same order.
      */
+    @Override
     public boolean equals(Object o) {
-        if (o == null || !(o instanceof ArrayDeque)) {
+        if (o == null || !(o instanceof Deque)) {
             return false;
         }
         if (o == this) {
             return true;
         }
-        ArrayDeque<T> oPro = (ArrayDeque<T>) o;
+        Deque<T> oPro = (Deque<T>) o;
         if (oPro.size() != this.size()) {
             return false;
         }
         int index = getFirst();
-        int indexO = oPro.getFirst();
         for (int i = 0; i < size; i++) {
             index = (index + i) % items.length;
-            indexO = (indexO + i) % oPro.items.length;
-            if (!items[index].equals(oPro.items[indexO])) {
+            if (!items[index].equals(oPro.get(i))) {
                 return false;
             }
         }
