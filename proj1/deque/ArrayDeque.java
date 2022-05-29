@@ -1,7 +1,7 @@
 package deque;
 
 /**
- * Build the ArrayDeque class using arrays as the core data structure.
+ * Builds the ArrayDeque class using arrays as the core data structure.
  * @author Irene Jiaxin Fan
 */
 
@@ -27,11 +27,17 @@ public class ArrayDeque<T> implements Deque<T>{
         resize();
         size += 1;
         items[nextFirst] = item;
-        if (nextFirst == 0) {
-            nextFirst = items.length - 1;
-        } else {
-            nextFirst = (nextFirst - 1) % items.length;
+        nextFirst = indexBefore(nextFirst);
+    }
+
+    /**
+     * Gets the index before a given index.
+     */
+    private int indexBefore(int index) {
+        if (index == 0) {
+            return items.length - 1;
         }
+        return (index - 1) % items.length;
     }
 
     /**
@@ -43,7 +49,7 @@ public class ArrayDeque<T> implements Deque<T>{
         resize();
         size += 1;
         items[nextLast] = item;
-        nextLast = (nextLast + 1) % items.length;
+        nextLast = indexAfter(nextLast);
     }
 
     // Returns the number of items in the deque.
@@ -58,21 +64,20 @@ public class ArrayDeque<T> implements Deque<T>{
      */
     @Override
     public void printDeque() {
-        int firstIndex = getFirst();
+        int firstIndex = indexAfter(nextFirst);
         int actualIndex = firstIndex;
         for (int index = 0; index < size; index++) {
             System.out.print(items[actualIndex] + " ");
-            actualIndex = (actualIndex + 1) % items.length;
+            actualIndex = indexAfter(actualIndex);
         }
         System.out.println();
     }
 
     /**
-     * Get the index of current first item of the deque.
-     * Assume the deque is not empty.
+     * Gets the index after the given index.
      */
-    private int getFirst() {
-        return (nextFirst + 1) % items.length;
+    private int indexAfter(int index) {
+        return (index + 1) % items.length;
     }
 
     /**
@@ -86,7 +91,7 @@ public class ArrayDeque<T> implements Deque<T>{
         }
         size -= 1;
         resize();
-        int index = getFirst();
+        int index = indexAfter(nextFirst);
         T item = items[index];
         nextFirst = index;
         return item;
@@ -103,21 +108,10 @@ public class ArrayDeque<T> implements Deque<T>{
         }
         size -= 1;
         resize();
-        int index = getLast();
+        int index = indexBefore(nextLast);
         T item = items[index];
         nextLast = index;
         return item;
-    }
-
-    /**
-     * Get the index of current last item of the deque.
-     * Assume the deque is not empty.
-     */
-    private int getLast() {
-        if (nextLast == 0) {
-            return items.length - 1;
-        }
-        return (nextLast - 1) % items.length;
     }
 
     /**
@@ -139,8 +133,8 @@ public class ArrayDeque<T> implements Deque<T>{
         }
         newArray = (T[]) new Object[newLength];
         if (!isEmpty()) {
-            int prevFirstIndex = getFirst();
-            int prevLastIndex = getLast();
+            int prevFirstIndex = indexAfter(nextFirst);
+            int prevLastIndex = indexBefore(nextLast);
             if (prevFirstIndex < prevLastIndex) {
                 System.arraycopy(items, prevFirstIndex, newArray, 0, size);
             } else {
@@ -163,7 +157,7 @@ public class ArrayDeque<T> implements Deque<T>{
         if (index >= size) {
             return null;
         }
-        int i = getFirst() + index;
+        int i = indexAfter(nextFirst) + index;
         return items[i % items.length];
     }
 
@@ -184,7 +178,7 @@ public class ArrayDeque<T> implements Deque<T>{
         if (oPro.size() != this.size()) {
             return false;
         }
-        int index = getFirst();
+        int index = indexAfter(nextFirst);
         for (int i = 0; i < size; i++) {
             index = (index + i) % items.length;
             if (!items[index].equals(oPro.get(i))) {
