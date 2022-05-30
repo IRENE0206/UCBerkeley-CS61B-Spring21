@@ -1,27 +1,29 @@
 package deque;
 
+import java.util.Iterator;
+
 /**
  * Build the LinkedListDeque class, which is LinkedList based.
  * @author Irene Jiaxin Fan
  */
-public class LinkedListDeque<T> implements Deque<T> {
+public class LinkedListDeque<T> implements Iterable<T>, Deque<T> {
     private LinkedNode sentinel;
     private int size;
     /**
      * Build LinkedList data structure using circular sentinel topology.
      */
     private class LinkedNode {
-        public T item;
-        public LinkedNode prev;
-        public LinkedNode next;
+        private T item;
+        private LinkedNode prev;
+        private LinkedNode next;
 
-        public LinkedNode() {
+        LinkedNode() {
             this.prev = this;
             this.next = this;
             this.item = null;
         }
 
-        public LinkedNode(T i, LinkedNode p, LinkedNode n) {
+        LinkedNode(T i, LinkedNode p, LinkedNode n) {
             this.item = i;
             this.prev = p;
             this.next = n;
@@ -29,7 +31,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
     // Creates an empty linked list deque.
     public LinkedListDeque() {
-       this.sentinel = new LinkedNode();
+        this.sentinel = new LinkedNode();
         this.size = 0;
     }
 
@@ -179,6 +181,30 @@ public class LinkedListDeque<T> implements Deque<T> {
             p = p.next;
         }
         return true;
+    }
+
+    private class NewIterator<T> implements Iterator<T> {
+        int current;
+        LinkedListDeque<T> linkedListDeque;
+
+        private NewIterator(LinkedListDeque<T> lld) {
+            current = 0;
+            linkedListDeque = lld;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current < linkedListDeque.size();
+        }
+
+        @Override
+        public T next() {
+            current += 1;
+            return linkedListDeque.get(current - 1);
+        }
+    }
+    public Iterator<T> iterator() {
+        return new NewIterator<T>(this);
     }
 
 }

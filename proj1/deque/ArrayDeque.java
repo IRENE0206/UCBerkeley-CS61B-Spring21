@@ -1,11 +1,13 @@
 package deque;
 
+import java.util.Iterator;
+
 /**
  * Builds the ArrayDeque class using arrays as the core data structure.
  * @author Irene Jiaxin Fan
 */
 
-public class ArrayDeque<T> implements Deque<T>{
+public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
     private int size;
     private T[] items;
     private int nextFirst;
@@ -148,9 +150,8 @@ public class ArrayDeque<T> implements Deque<T>{
     }
 
     /**
-     * public T get(int index): Gets the item at the given index, where 0 is the front, 1 is the next item, and so forth.
+     * public T get(int index): Gets the item at the given index.
      * If no such item exists, returns null.
-     * Must not alter the deque!
      */
     @Override
     public T get(int index) {
@@ -186,5 +187,28 @@ public class ArrayDeque<T> implements Deque<T>{
             }
         }
         return true;
+    }
+
+    private class newIterator<T> implements Iterator<T> {
+        int current;
+        ArrayDeque<T> arrayDeque;
+        private newIterator(ArrayDeque<T> aDeque) {
+            current = 0;
+            arrayDeque = aDeque;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return current < arrayDeque.size();
+        }
+
+        @Override
+        public T next() {
+            current += 1;
+            return arrayDeque.get(current - 1);
+        }
+    }
+    public Iterator<T> iterator() {
+        return new newIterator<>(this);
     }
 }
