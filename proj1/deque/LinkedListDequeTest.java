@@ -1,5 +1,6 @@
 package deque;
 
+import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -118,5 +119,42 @@ public class LinkedListDequeTest {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
         }
         
+    }
+
+    @Test
+    public void randomizedTest() {
+        LinkedListDeque<Integer> L = new LinkedListDeque<>();
+        ArrayDeque<Integer> L2 = new ArrayDeque<>();
+
+        int N = 5000;
+        for (int i = 0; i < N; i += 1) {
+            int operationNumber = StdRandom.uniform(0, 5);
+            if (operationNumber == 0) {
+                // addLast
+                int randVal = StdRandom.uniform(0, 100);
+                L.addLast(randVal);
+                L2.addLast(randVal);
+            } else if (operationNumber == 1) {
+                // addFirst
+                int randVal = StdRandom.uniform(0, 100);
+                L.addFirst(randVal);
+                L2.addFirst(randVal);
+            } else if (operationNumber == 2) {
+                // size
+                int size = L.size();
+                int size2 = L2.size();
+                assertEquals(size, size2);
+            } else if (operationNumber == 3 && L.size() > 0 && L2.size() > 0) {
+                // getLast
+                int removeFirst1 = L.removeFirst();
+                int removeFirst2 = L2.removeFirst();
+                assertEquals(removeFirst1, removeFirst2);
+            } else if (L.size() > 0 && L2.size() > 0) {
+                // removeLast
+                int removeLast1 = L.removeLast();
+                int removeLast2 = L2.removeLast();
+                assertEquals(removeLast1, removeLast2);
+            }
+        }
     }
 }

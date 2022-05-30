@@ -7,7 +7,7 @@ import java.util.Iterator;
  * @author Irene Jiaxin Fan
 */
 
-public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
+public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
     private int size;
     private T[] items;
     private int nextFirst;
@@ -27,9 +27,9 @@ public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
     @Override
     public void addFirst(T item) {
         resize();
-        size += 1;
         items[nextFirst] = item;
         nextFirst = indexBefore(nextFirst);
+        size += 1;
     }
 
     /**
@@ -39,7 +39,7 @@ public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
         if (index == 0) {
             return items.length - 1;
         }
-        return (index - 1) % items.length;
+        return index - 1;
     }
 
     /**
@@ -49,9 +49,9 @@ public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
     @Override
     public void addLast(T item) {
         resize();
-        size += 1;
         items[nextLast] = item;
         nextLast = indexAfter(nextLast);
+        size += 1;
     }
 
     // Returns the number of items in the deque.
@@ -66,8 +66,7 @@ public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
      */
     @Override
     public void printDeque() {
-        int firstIndex = indexAfter(nextFirst);
-        int actualIndex = firstIndex;
+        int actualIndex = indexAfter(nextFirst);
         for (int index = 0; index < size; index++) {
             System.out.print(items[actualIndex] + " ");
             actualIndex = indexAfter(actualIndex);
@@ -91,11 +90,11 @@ public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
         if (isEmpty()) {
             return null;
         }
-        size -= 1;
         resize();
-        int index = indexAfter(nextFirst);
-        T item = items[index];
-        nextFirst = index;
+        int first = indexAfter(nextFirst);
+        T item = items[first];
+        nextFirst = first;
+        size -= 1;
         return item;
     }
 
@@ -108,11 +107,11 @@ public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
         if (isEmpty()) {
             return null;
         }
-        size -= 1;
         resize();
-        int index = indexBefore(nextLast);
-        T item = items[index];
-        nextLast = index;
+        int last = indexBefore(nextLast);
+        T item = items[last];
+        nextLast = last;
+        size -= 1;
         return item;
     }
 
@@ -122,7 +121,7 @@ public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
     private void resize() {
         int newLength;
         T[] newArray;
-        if (size >= 16 && size * 4 < items.length) {
+        if (items.length >= 16 && (size - 1) * 4 < items.length) {
             if (isEmpty()) {
                 newLength = 8;
             } else {
@@ -140,8 +139,9 @@ public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
             if (prevFirstIndex < prevLastIndex) {
                 System.arraycopy(items, prevFirstIndex, newArray, 0, size);
             } else {
-                System.arraycopy(items, prevFirstIndex, newArray, 0, items.length - prevFirstIndex);
-                System.arraycopy(items, 0, newArray, size - 1,  prevLastIndex + 1);
+                int secondPartLength = items.length - prevFirstIndex;
+                System.arraycopy(items, prevFirstIndex, newArray, 0, secondPartLength);
+                System.arraycopy(items, 0, newArray, secondPartLength,  prevLastIndex + 1);
             }
         }
         items = newArray;
@@ -189,10 +189,10 @@ public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
         return true;
     }
 
-    private class newIterator<T> implements Iterator<T> {
+    private class NewIterator<T> implements Iterator<T> {
         int current;
         ArrayDeque<T> arrayDeque;
-        private newIterator(ArrayDeque<T> aDeque) {
+        private NewIterator(ArrayDeque<T> aDeque) {
             current = 0;
             arrayDeque = aDeque;
         }
@@ -209,6 +209,6 @@ public class ArrayDeque<T> implements Iterable<T> , Deque<T> {
         }
     }
     public Iterator<T> iterator() {
-        return new newIterator<>(this);
+        return new NewIterator<>(this);
     }
 }
