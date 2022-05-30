@@ -179,10 +179,8 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T> {
         if (oPro.size() != this.size()) {
             return false;
         }
-        int index = indexAfter(nextFirst);
         for (int i = 0; i < size; i++) {
-            index = (index + i) % items.length;
-            if (!items[index].equals(oPro.get(i))) {
+            if (!this.get(i).equals(oPro.get(i))) {
                 return false;
             }
         }

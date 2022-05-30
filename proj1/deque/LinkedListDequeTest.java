@@ -156,5 +156,6 @@ public class LinkedListDequeTest {
                 assertEquals(removeLast1, removeLast2);
             }
         }
+        assertTrue("L and L2 should be equal", L.equals(L2));
     }
 }
