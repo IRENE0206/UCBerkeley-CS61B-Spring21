@@ -14,15 +14,13 @@ public class TestArrayDequeEC {
         for (int i = 0; i < 10000; i++) {
             int operationNumber = StdRandom.uniform(0, 4);
             if (operationNumber == 0) {
-                int randomValue = StdRandom.uniform(0, 100);
-                sad.addFirst(randomValue);
-                ads.addFirst(randomValue);
-                assertEquals("addFirst(" + randomValue + "\naddFirst(" + randomValue +")", ads.size(), sad.size());
+                sad.addFirst(i);
+                ads.addFirst(i);
+                assertEquals("addFirst(" + i + ")\naddFirst(" + i +")", ads.size(), sad.size());
             } else if (operationNumber == 1) {
-                int randomValue = StdRandom.uniform(0, 100);
-                sad.addLast(randomValue);
-                ads.addLast(randomValue);
-                assertEquals("addLast(" + randomValue + "\naddLast(" + randomValue +")", ads.size(), sad.size());
+                sad.addLast(i);
+                ads.addLast(i);
+                assertEquals("addLast(" + i + "\naddLast(" + i +")", ads.size(), sad.size());
             } else if (operationNumber == 2 && sad.size() > 0 && ads.size() > 0) {
                 Integer sadFirst = sad.removeFirst();
                 Integer adsFirst = ads.removeFirst();
