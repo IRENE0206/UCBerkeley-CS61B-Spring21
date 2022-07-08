@@ -32,6 +32,20 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }
     }
 
+    public void printInOrder() {
+        printInOrder(BST);
+    }
+
+    private void printInOrder(Entry e) {
+        if (e == null) {
+            return;
+        } else if (e.left != null) {
+            printInOrder(e.left);
+        }
+        System.out.println(e.key.toString());
+        printInOrder(e.right);
+    }
+
     private Entry find(Entry e, K k) {
         if (e == null || k == null) {
             return null;
