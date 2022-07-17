@@ -1,0 +1,49 @@
+InsertRandomSpeedTest
+L: 8
+
+10000
+hashmap.ULLMap: 0.31 sec
+hashmap.MyHashMap: 0.03 sec
+Java's Built-in HashMap: 0.00 sec
+50000
+hashmap.ULLMap: Stack Overflow
+hashmap.MyHashMap: 0.95 sec
+Java's Built-in HashMap: 0.02 sec
+20000
+hashmap.ULLMap: 1.28 sec
+class hashmap.MyHashMap: 0.10 sec
+Java's Built-in HashMap: 0.00 sec
+
+InsertInOrderSpeedTest
+10000
+hashmap.ULLMap: 0.44 sec
+hashmap.MyHashMap: 0.05 sec
+Java's Built-in HashMap: 0.02 sec
+50000
+hashmap.ULLMap: Stack Overflow
+hashmap.MyHashMap: 4.79 sec
+HashMap: 0.03 sec
+20000
+hashmap.ULLMap: 2.06 sec
+hashmap.MyHashMap: 0.20 sec
+Java's Built-in HashMap: 0.02 sec
+
+BucketsSpeedTest
+10000
+class hashmap.MyHashMapALBuckets: 0.02 sec
+class hashmap.MyHashMapLLBuckets: 0.03 sec
+class hashmap.MyHashMapTSBuckets: 0.06 sec
+class hashmap.MyHashMapHSBuckets: 0.07 sec
+class hashmap.MyHashMapPQBuckets: 0.02 sec
+50000
+class hashmap.MyHashMapALBuckets: 0.88 sec
+class hashmap.MyHashMapLLBuckets: 1.20 sec
+class hashmap.MyHashMapTSBuckets: 1.56 sec
+class hashmap.MyHashMapHSBuckets: 2.10 sec
+class hashmap.MyHashMapPQBuckets: 0.83 sec
+100000
+class hashmap.MyHashMapALBuckets: 4.08 sec
+class hashmap.MyHashMapLLBuckets: 11.07 sec
+class hashmap.MyHashMapTSBuckets: 7.73 sec
+class hashmap.MyHashMapHSBuckets: 12.43 sec
+class hashmap.MyHashMapPQBuckets: 8.19 sec
