@@ -1,6 +1,6 @@
 # Gitlet Design Document
 
-**Name**:
+**Name**: Irene Jiaxin Fan
 
 ## Classes and Data Structures
 

@@ -6,24 +6,42 @@ import static gitlet.Utils.*;
 // TODO: any imports you need here
 
 /** Represents a gitlet repository.
- *  TODO: It's a good idea to give a description here of what else this Class
- *  does at a high level.
+ *  The structure of a gitlet Repository is as follows:
+ *  .gitlet/ -- top level folder for all persistent data
+ *      HEAD -- file containing the head pointer
+ *      refs/ --
+ *      objects/ --
  *
- *  @author TODO
+ *
+ *  @author Irene Jiaxin Fan
  */
 public class Repository {
-    /**
-     * TODO: add instance variables here.
-     *
-     * List all instance variables of the Repository class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided two examples for you.
-     */
 
-    /** The current working directory. */
+    // The current working directory.
     public static final File CWD = new File(System.getProperty("user.dir"));
-    /** The .gitlet directory. */
+    // The .gitlet directory.
     public static final File GITLET_DIR = join(CWD, ".gitlet");
+    public static final File HEAD = join(GITLET_DIR, "HEAD");
+    public static final File refs = join(GITLET_DIR, "refs");
+    public static final File logs = join(GITLET_DIR, "logs");
+    // The staging directory.
+    public static final File index = join(GITLET_DIR, "index");
+    public static final File COMMIT_EDITMSG = join(GITLET_DIR, "COMMIT_EDITMSG.txt");
+    public static final File objects = join(GITLET_DIR, "objects");
 
-    /* TODO: fill in the rest of this class. */
+    // Create an initial branch without any commit
+    public static void init() {
+        if (GITLET_DIR.exists()) {
+            Utils.error("A Gitlet version-control system already exists in the current directory.");
+        } else {
+            Commit initialCommit = new Commit();
+            GITLET_DIR.mkdir();
+            HEAD.mkdir();
+            logs.mkdir();
+            index.mkdir();
+            COMMIT_EDITMSG.mkdir();
+            objects.mkdir();
+            refs.mkdir();
+        }
+    }
 }
